@@ -3,33 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Prime-Login</title>
+    <title>Prime Sign Up</title>
 </head>
 <body>
     <div class="container">
         <form action="action_page.php" method="post">
             <div class="inner-container">
-              <h1 style="text-align: center;">Login</h1>  
+              <h1 style="text-align: center;">Sign Up</h1>  
               <label for="uname"><b>Username</b></label>
               <input type="text" placeholder="Enter Username" id="floatingInput" name="uname" required>
+
+              <label for="email"><b>Email ID</b></label>
+              <input type="text" placeholder="Enter email" id="floatingInput" name="email" required>
+
+              <label for="phno"><b>Phone Number</b></label>
+              <input type="text" placeholder="Enter Phone Number" id="floatingInput" name="phno" required>
           
               <label for="psw"><b>Password</b></label>
               <input type="password" placeholder="Enter Password" name="psw" required>
+
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="btnradio1">Villager</label>
+              
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">Vendor</label>
+
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <label class="btn btn-outline-primary" for="btnradio2">NGO / School</label>
+              </div>
           
-              <button type="submit">Login</button>
-              <label>
-                <input type="checkbox" checked="checked" name="remember"> Remember me
-              </label>
+              <button type="submit">Create Account</button>
             </div>
           
             <div class="container" >
-              <button type="button" class="cancelbtn">Cancel</button>
-              <span class="psw">Forgot <a href="#">password?</a></span>
+              <button type="button" class="cancelbtn"onclick="location.href = 'index.html';">Cancel</button>
             </div>
           </form>
     </div>
-    
+
     <style>
         *{
             background-color: linear-gradient(left-right, color- red,blue,green,orange,indigo);
