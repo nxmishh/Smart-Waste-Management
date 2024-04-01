@@ -1,0 +1,11 @@
+## Events
+- Awarness Session on Types of Waste.
+- How to make Compost from Household waste.
+- Effective ways to Reduce and Reuse the Plastic Waste. 
+- Introduction to Sustainable Waste Management Practices
+- Understanding Recycling: Sorting, Processing, and Benefits
+- Community Clean-Up and Litter Prevention Campaign
+- Plastic Pollution Awareness and Beach Cleanup
+- Introduction to Composting: Turning Food Scraps into Nutrient-Rich Soil
+- The Impact of Food Waste and Strategies for Prevention
+- Creative Upcycling Workshop

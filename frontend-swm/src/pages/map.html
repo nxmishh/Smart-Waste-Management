@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Garbage Collection Optimization</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .sequence-marker {
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="map" style="width:100%; height: 100vh"></div>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    <script>
+
+        var map = L.map('map').setView([18.5204, 73.8567], 12);
+        mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'Leaflet &copy; ' + mapLink + ', contribution', maxZoom: 18 }).addTo(map);
+
+        // Start location
+        var startLocation = L.latLng(18.5204, 73.8567); // Pune, Maharashtra
+
+        // Distributed locations across Pune
+        var locations = [
+            L.latLng(18.5204, 73.8567), // Pune center
+            L.latLng(18.5548, 73.8021), // Hinjawadi
+            L.latLng(18.4635, 73.8677), // Katraj
+            L.latLng(18.5322, 73.8478), // Magarpatta
+            L.latLng(18.4962, 73.9419), // Kothrud
+            L.latLng(18.5394, 73.8391), // Shivajinagar
+            L.latLng(18.5196, 73.8553), // Swargate
+            L.latLng(18.5203, 73.8566), // FC Road
+            L.latLng(18.5628, 73.9167), // Hadapsar
+            L.latLng(18.5165, 73.8567)  // Deccan
+        ];
+
+        // Active locations (1 indicates to consider, 0 indicates not to consider)
+        var activeLocation = [1, 1, 1, 1, 0, 1, 1, 1, 0, 1];
+
+        // Calculate distances between all pairs of locations
+        var distanceMatrix = calculateDistanceMatrix(locations);
+
+        // Apply Dijkstra's algorithm to find the shortest path
+        var reorderedLocations = reorderLocationsUsingDijkstra(startLocation, locations, activeLocation, distanceMatrix);
+
+        // Add start location marker
+        L.marker(startLocation).addTo(map);
+
+        // Add location markers with sequence number and percentage fill tooltip
+        reorderedLocations.forEach(function (location, index) {
+            if (activeLocation[index] === 1) {
+                // Create marker with sequence number and percentage fill tooltip
+                var marker = L.marker(location).addTo(map);
+                marker.bindTooltip((index + 1).toString(), { className: 'sequence-marker', permanent: true }).openTooltip();
+            }
+        });
+
+        // Create array of waypoints including start location and sorted locations
+        var waypoints = [startLocation].concat(reorderedLocations.filter((location, index) => activeLocation[index] === 1));
+
+        // Create routing control with waypoints
+        L.Routing.control({
+            waypoints: waypoints,
+            routeWhileDragging: true // Update route while dragging waypoints
+        }).addTo(map);
+
+        // Function to calculate distances between all pairs of locations
+        function calculateDistanceMatrix(locations) {
+            var distanceMatrix = [];
+            for (var i = 0; i < locations.length; i++) {
+                distanceMatrix[i] = [];
+                for (var j = 0; j < locations.length; j++) {
+                    distanceMatrix[i][j] = locations[i].distanceTo(locations[j]); // Using Leaflet's distanceTo method
+                }
+            }
+            return distanceMatrix;
+        }
+
+        // Function to apply Dijkstra's algorithm to reorder locations based on shortest path
+        function reorderLocationsUsingDijkstra(startLocation, locations, activeLocation, distanceMatrix) {
+            // Filter out inactive locations
+            var activeLocations = locations.filter((location, index) => activeLocation[index] === 1);
+            // Sort active locations based on distance from the startLocation
+            activeLocations.sort(function(a, b) {
+                var distanceA = startLocation.distanceTo(a);
+                var distanceB = startLocation.distanceTo(b);
+                return distanceA - distanceB;
+            });
+            return activeLocations;
+        }
+
+    </script>
+
+</body>
+
+</html>

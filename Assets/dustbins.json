@@ -1,0 +1,9 @@
+const sampleData = {
+    {
+        _id: "1",
+        wetWaste: "60",
+        metalWaste: "50",
+        glassWaste: "40",
+        paperWaste: "30"
+    }
+}
